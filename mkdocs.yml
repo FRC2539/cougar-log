@@ -1,0 +1,20 @@
+site_name: Cougar Log
+site_description: Cougar Log is a cli for rapidly converting and visualizing wpilog files.
+site_url: https://frc2539.github.io/cougar-log
+
+theme: 
+    name: material
+    palette:
+        primary: black
+        accent: orange
+    icon:
+        repo: fontawesome/brands/github
+    logo: img/logo.png
+    favicon: img/logo.png
+
+repo_name: FRC2539/cougar-lib
+repo_url: https://github.com/FRC2539/cougar-lib
+edit_uri: ""
+
+markdown_extensions:
+    - mkdocs-typer

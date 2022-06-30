@@ -1,7 +1,14 @@
+# Poetry and Python
 **\__pycache__
 __pycache__
-
 dist
 
+# Testing files
 *.wpilog
 *.csv
+
+# pytest
+.pytest_cache
+
+# MkDocs generated folder
+site

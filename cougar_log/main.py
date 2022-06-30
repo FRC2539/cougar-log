@@ -24,11 +24,11 @@ def convert(
         None,
         "--input",
         "-i",
-        prompt="Enter the path to the file to convert",
-        help="The file provided to convert.",
+        prompt="Enter the path to the file/directory to convert",
+        help="The file/directory provided to convert.",
     ),
     output_path: Path = typer.Option(
-        "output.csv",
+        None,
         "--output",
         "-o",
         help="The name of the resulting file.",
@@ -47,10 +47,25 @@ def convert(
     ),
 ):
     """
-    This command will convert a given wpilog file into a csv.
+    This command will convert a given wpilog file or directory of files into csv files.
 
-    Optionally use filter to select only logs containing a given name.
+    Optionally use filter to select only log entries containing a given name.
     """
+    # Convert all files in the given directory, or convert just a single given file.
+    if input_path.is_dir():
+        for file in input_path.iterdir():
+            # Convert all valid files within the given folder
+            if file.is_dir() or not file.is_file() or file.suffix != ".wpilog":
+                continue
+            else:
+                convert_file(file, None, name_filter, include_system_time)
+    else:
+        convert_file(input_path, output_path, name_filter, include_system_time)
+
+
+def convert_file(
+    input_path: Path, output_path: Path, name_filter: str, include_system_time: bool
+):
     [log_dataframe, error] = read_log_to_dataframe(input_path=input_path)
 
     if error is not None:
@@ -64,9 +79,12 @@ def convert(
             log_dataframe, name_to_exclude="systemTime"
         )
 
+    if output_path is None:
+        output_path = input_path.stem + ".csv"
+
     log_dataframe.to_csv(output_path, index=False)
 
-    typer.echo("Successfully converted and exported the provided file!")
+    typer.echo(f"Successfully converted and exported the log to '{output_path}'")
 
 
 @app.command()
