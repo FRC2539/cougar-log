@@ -1,6 +1,10 @@
 from datetime import datetime
 from pathlib import Path
+from numpy import average
+
+import typer
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from cougar_log.data_log_reader import DataLogReader
 
@@ -9,6 +13,10 @@ HEADER_LIST = ["Timestamp", "Name", "Value"]
 
 def filter_dataframe(dataframe: pd.DataFrame, name_filter: str):
     return dataframe.loc[dataframe[HEADER_LIST[1]] == name_filter]
+
+
+def exclude_from_dataframe(dataframe: pd.DataFrame, name_to_exclude: str):
+    return dataframe.loc[dataframe[HEADER_LIST[1]] != name_to_exclude]
 
 
 def read_log_to_dataframe(input_path: Path):
@@ -125,3 +133,34 @@ def extract_value_from_entry(entry, record):
                 value = list(record.getStringArray())
 
     return [timestamp, entry.name, value]
+
+
+def plot_dataframe(dataframe: pd.DataFrame):
+    _, axes = plt.subplots(nrows=1, ncols=1, num="Cougar Log")
+
+    axes.set_xlabel("Timestamp")
+    axes.set_ylabel("Value")
+    axes.set_title("WPILOG Graph")
+
+    # Automatically filter out all system time entries
+    dataframe = exclude_from_dataframe(dataframe, "systemTime")
+
+    all_names = dataframe[HEADER_LIST[1]].unique()
+
+    for name in all_names:
+        filtered_dataframe = filter_dataframe(dataframe, name)
+
+        # Include only timestamps and values
+        filtered_dataframe = filtered_dataframe[[HEADER_LIST[0], HEADER_LIST[2]]]
+
+        try:
+            plt.plot(
+                filtered_dataframe["Timestamp"].values,
+                [average(x) for x in filtered_dataframe["Value"].values],
+                label=name,
+            )
+        except:
+            typer.echo(f"Skipping '{name}' as graphing of this type is not supported")
+
+    plt.legend()
+    plt.show()
