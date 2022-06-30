@@ -13,7 +13,7 @@ theme:
     favicon: img/logo.png
 
 repo_name: FRC2539/cougar-lib
-repo_url: https://github.com/FRC2539/cougar-lib
+repo_url: https://github.com/FRC2539/cougar-log
 edit_uri: ""
 
 markdown_extensions:
