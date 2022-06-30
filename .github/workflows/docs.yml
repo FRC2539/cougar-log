@@ -30,13 +30,13 @@ jobs:
 
             - name: Install dependencies
               if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-              run: poetry install --no-interaction --no-root
+              run: poetry install --no-root
 
             - name: Install library
-              run: poetry install --no-interaction
+              run: poetry install
 
             - name: Build Docs
-              run: mkdocs build
+              run: poetry run mkdocs build
 
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@4.1.4
