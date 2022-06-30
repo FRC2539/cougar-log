@@ -1,0 +1,21 @@
+name: Push to PyPi
+
+on:
+    push:
+        branches: [master]
+
+jobs:
+    build-and-publish:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install Poetry
+              uses: snok/install-poetry@v1
+
+            - name: Add PyPi configuration
+              run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+
+            - name: Publish the Package
+              run: poetry publish --build
