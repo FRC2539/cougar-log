@@ -293,6 +293,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#downloading-files-from-a-robot" class="md-nav__link">
+    Downloading Files from a Robot
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -314,6 +321,13 @@
           <li class="md-nav__item">
   <a href="#convert" class="md-nav__link">
     convert
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    download
   </a>
   
 </li>
@@ -422,6 +436,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#downloading-files-from-a-robot" class="md-nav__link">
+    Downloading Files from a Robot
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -443,6 +464,13 @@
           <li class="md-nav__item">
   <a href="#convert" class="md-nav__link">
     convert
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    download
   </a>
   
 </li>
@@ -509,6 +537,11 @@
 <p>Use the table option to see the names of all of the log entries.</p>
 <pre><code>cougar-log graph -i my_data_log.wpilog -f /temps/drive
 </code></pre>
+<h4 id="downloading-files-from-a-robot">Downloading Files from a Robot</h4>
+<p>Replace XX.XX with your team number in that format.</p>
+<p><em>Note: this command has a multitude of options available.</em></p>
+<pre><code>cougar-log download --host &quot;10.XX.XX.2&quot;
+</code></pre>
 <hr />
 <h2 id="cougar-log">cougar-log</h2>
 <p>Usage:</p>
@@ -531,6 +564,25 @@
   -f, --filter TEXT          Filter by a specific name in the logs.
   -t, --include-system-time  Whether or not to include system time in the
                              output.
+</code></pre>
+<h3 id="download">download</h3>
+<p>This command will connect to a robot and download log files from the robot.</p>
+<p>Usage:</p>
+<pre><code> download [OPTIONS]
+</code></pre>
+<p>Options:</p>
+<pre><code>  -d, --directory TEXT       The directory to download files from.  [default:
+                             .]
+  -s, --save-directory TEXT  The directory to save downloaded files in.
+                             [default: ./logs]
+  --remove / --no-remove     Whether or not to delete log files from the robot
+                             after downloading them.  [default: remove]
+  -h, --host TEXT            The host to download files from.
+  -u, --user TEXT            The user to authenticate as.  [default: lvuser]
+  --password TEXT            The password used for connecting to the robot. By
+                             default FRC robots have no password.
+  -p, --port INTEGER         The port to use for the ssh connection.
+                             [default: 22]
 </code></pre>
 <h3 id="graph">graph</h3>
 <p>This command will display the contents of a wpilog file in a graph.</p>
