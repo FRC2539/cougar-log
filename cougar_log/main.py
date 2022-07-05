@@ -1,4 +1,5 @@
 from pathlib import Path
+import click_spinner
 
 import typer
 
@@ -9,6 +10,7 @@ from cougar_log.log_helpers import (
     plot_dataframe,
     read_log_to_dataframe,
 )
+from cougar_log.ssh_download import RobotSSHInterface
 
 app = typer.Typer()
 
@@ -164,3 +166,71 @@ def graph(
     typer.echo("Creating a graph from the given log.")
 
     plot_dataframe(log_dataframe)
+
+
+@app.command()
+def download(
+    directory: str = typer.Option(
+        ".",
+        "--directory",
+        "-d",
+        help="The directory to download files from.",
+    ),
+    save_directory: str = typer.Option(
+        "./logs",
+        "--save-directory",
+        "-s",
+        help="The directory to save downloaded files in.",
+    ),
+    remove: bool = typer.Option(
+        True,
+        help="Whether or not to delete log files from the robot after downloading them.",
+    ),
+    host: str = typer.Option(
+        None,
+        "--host",
+        "-h",
+        prompt="Enter the host to connect to (ip/hostname)",
+        help="The host to download files from.",
+    ),
+    user: str = typer.Option(
+        "lvuser",
+        "--user",
+        "-u",
+        help="The user to authenticate as.",
+    ),
+    password: str = typer.Option(
+        None,
+        help="The password used for connecting to the robot. By default FRC robots have no password.",
+    ),
+    port: int = typer.Option(
+        22,
+        "--port",
+        "-p",
+        help="The port to use for the ssh connection.",
+    ),
+):
+    """
+    This command will connect to a robot and download log files from the robot.
+    """
+
+    typer.echo("Connecting to the robot ... ", nl=False)
+
+    with click_spinner.spinner():
+        interface = RobotSSHInterface(host, user, password, port, remove_files=remove)
+
+    typer.echo("Connected!")
+
+    typer.echo("Downloading log files ... ", nl=False)
+
+    with click_spinner.spinner():
+        error = interface.download_from_directory(
+            source_directory=directory, target_directory=save_directory, remove=remove
+        )
+
+    if error is not None:
+        exit_with_error(error)
+
+    typer.echo("Download complete!")
+
+    interface.close_interface()

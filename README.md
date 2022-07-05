@@ -56,6 +56,16 @@ Use the table option to see the names of all of the log entries.
 cougar-log graph -i my_data_log.wpilog -f /temps/drive
 ```
 
+#### Downloading Files from a Robot
+
+Replace XX.XX with your team number in that format.
+
+_Note: this command has a multitude of options available._
+
+```
+cougar-log download --host "10.XX.XX.2"
+```
+
 ## Documentation
 
 Click the link below to visit the documentation:
