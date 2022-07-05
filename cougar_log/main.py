@@ -200,7 +200,7 @@ def download(
         help="The user to authenticate as.",
     ),
     password: str = typer.Option(
-        None,
+        "",
         help="The password used for connecting to the robot. By default FRC robots have no password.",
     ),
     port: int = typer.Option(
